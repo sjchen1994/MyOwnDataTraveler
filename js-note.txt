@@ -1,0 +1,12 @@
+1.把某个元素移除
+ 
+display：none;
+visibility: hidden;
+width \ height ->0 
+opacity 0
+left \ top
+拿一个白的div盖住它
+margin 负值
+
+
+2.鼠标  键盘 系统 表单 事件
