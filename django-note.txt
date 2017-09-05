@@ -1,0 +1,101 @@
+1.创建第一个页面
+创建应用，根目录下
+python manage.py startapp blog
+cd blog
+vim views.py
+	from django.http import HttpResponse
+
+	def index(request):
+		return HttpResponse('hello,world')
+cd ..
+cd myblog/
+
+vim settings.py
+	installed_apps里面加入应用名称
+
+vim urls.py //把应用.py import 进来
+import blog.views as bv 
+
+
+	url(r'^index/', bv.index),
+(另一种配置urls的方法：以后一般用这种
+		
+		去掉import blog.views as bv   第一行   from django.conf.urls import url后面加  , include
+					
+			urlpatterns里面：
+				url(r'^index/', include('blog.urls')),
+)
+
+在blog里面的  views  定义响应函数  如  def test2(request)： return HttpResponse('test1')
+
+urls 配置  
+from django.conf.urls import url
+from . import views
+
+urlpatterns = [
+	url(r'^1/', views.test1),
+	url(r'^2/', views.test2),
+]  
+
+这样的话就可以进  127.0.0.1:8000/index/1/ 和 127.0.0.1:8000/index/2/
+
+^$ 约束为空字符串
+
+2.
+
+修改 app目录下  views.py 
+
+return render(request, 'index.html')
+
+app目录下  新 templates文件夹里  加  html文件
+
+这样就可以加载html文件
+
+render(request, 'index.html', {'hello': '11'})  第三个参数：字典  可以把这个参数传到html文件中
+
+html:
+
+<body>
+	<h1> {{ hello}} </h1>
+</body>
+
+
+不同app下templates目录中的同名html文件会造成冲突
+解决方法：在app文件夹中创建app名字的文件夹，把html放进去
+
+3.从数据库中读取数据
+
+models.py 
+	from django.db import models
+
+class article(models.Model):
+	title = models.CharField(max_length=32, default='Title')
+	content = models.TextField(null=True)
+
+
+views.py
+
+from . import models
+
+def index(request):
+	a = models.article.objects.get(pk=1)
+	return render(request, 'index.html', {'go':a})
+
+html
+<h1>{{ go.title }} </h1>
+<h2>{{ go.content }} <h2>
+
+4.创建超级用户
+
+python manage.py createsuperuser
+
+访问admin  如果attempt to write a readonly database，就 chmod 777 db.sqlite3 , cd .. chmod 777 *  //提升权限就好了
+
+5.admin管理数据
+
+在admin.py 中
+from . import models.py
+	admin.site.register(models.article)
+
+再进入admin管理页面即可
+ 
