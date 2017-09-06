@@ -98,4 +98,11 @@ from . import models.py
 	admin.site.register(models.article)
 
 再进入admin管理页面即可
+
+6.改变数据对象默认名称
+
+models.py (append)
+	类里
+		def __unicode__(self):
+				return self.title   
  
