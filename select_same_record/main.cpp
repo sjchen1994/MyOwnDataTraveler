@@ -1,4 +1,4 @@
-#include <QCoreApplication>
+﻿#include <QCoreApplication>
 #include <QAxObject>
 #include <QFile>
 #include <QDebug>
@@ -11,14 +11,14 @@ int main(int argc, char *argv[])
     QMap<QString, QString> frommap;
     QVector<QString> orimap;
     QMap<QString, QString> tomap;
-    QFile filefrom1("C:\\Users\\Administrator\\Desktop\\2010.txt");
+    QFile filefrom1("C:\\Users\\chenshijun\\Desktop\\bematched.txt");
     QString rl_data;
     if(!filefrom1.open(QIODevice::ReadOnly | QIODevice::Text)){
     }
     QTextStream stream1(&filefrom1);
     while(true){
         rl_data = stream1.readLine();
-        if(rl_data == ""){
+        if(stream1.atEnd()){
             break;
         }
         QString data;
@@ -40,12 +40,14 @@ int main(int argc, char *argv[])
             data += *it;
             it++;
         }
-        frommap.insert(com_name, indu_name);
+        if(frommap.find(com_name) == frommap.end()){
+            frommap.insert(com_name, indu_name);
+        }
     }
     filefrom1.close();
 
 
-    QFile filefrom2("C:\\Users\\Administrator\\Desktop\\2015.txt");
+    QFile filefrom2("C:\\Users\\chenshijun\\Desktop\\match.txt");
     if(!filefrom2.open(QIODevice::ReadOnly | QIODevice::Text)){
     }
     QTextStream stream2(&filefrom2);
@@ -79,7 +81,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    QFile data("C:\\Users\\Administrator\\Desktop\\final.txt");
+    QFile data("C:\\Users\\chenshijun\\Desktop\\final.txt");
     if(data.open(QFile::WriteOnly | QIODevice::Truncate | QIODevice::Text)){
         QTextStream out(&data);
         for(auto it = tomap.begin(); it != tomap.end(); it++){
